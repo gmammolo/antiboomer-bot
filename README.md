@@ -30,4 +30,4 @@ Reminder: il token del bot viene generato e gestito dentro Telegram.
 
 ## Release
 
-// TODO
+// TODO see heroku info
