@@ -2,21 +2,21 @@ import TelegramBotClient from 'node-telegram-bot-api'
 
 export default class Bot {
     constructor(token) {
-        this.client = new TelegramBotClient(token, { polling: true })
-        this.client.on("polling_error", (msg) => console.log(msg));
+        this.telegramBot = new TelegramBotClient(token)
+        this.telegramBot.on("polling_error", (msg) => console.log(msg));
     }
 
-    start() {
-
+    async start() {
+        await this.telegramBot.startPolling({ restart: true });
         const antiboomerMessage = "@${nome} non essere boomer e non urlare! per questa volta te lo correggo io il tuo messaggio. Visto, era cosi difficile?";
 
-        this.client.on('message', message => {
+        this.telegramBot.on('message', message => {
             // console.log('Got a message', message)
             const text = message.text;
             if(text && this.checkUpperCase(text)) {
                 const newMessage = `@${message.from.username} ha detto:`+text.toLowerCase();
-                this.client.sendMessage(message.chat.id, newMessage, {reply_to_message_id: message.message_id});
-                this.client.sendMessage(message.chat.id, antiboomerMessage.replace('${nome}',message.from.username));
+                this.telegramBot.sendMessage(message.chat.id, newMessage, {reply_to_message_id: message.message_id});
+                this.telegramBot.sendMessage(message.chat.id, antiboomerMessage.replace('${nome}',message.from.username));
             }
         })
     }
@@ -30,6 +30,15 @@ export default class Bot {
     checkUpperCase(text) {
         return text.length > 5 && (text.match(/[A-Z]/g) || []).length > (text.length * 0.3);
     }
+
+    async stop(){
+        if (telegramBot != null) {
+          await telegramBot.stopPolling({ cancel: true });
+          telegramBot = null;
+        }
+        process.exit();
+    }
+
 
 
     

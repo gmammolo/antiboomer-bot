@@ -34,3 +34,7 @@ if(config.telegram.token) {
 } else {
     console.error('Token di telegram non trovato!')
 }
+
+// process.on('SIGQUIT', bot.stop);
+// process.on('SIGINT', bot.stop);
+
