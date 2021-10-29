@@ -1,0 +1,18 @@
+{
+  "name": "antiboomerbot",
+  "version": "1.0.0",
+  "description": "Un bot per gestire e cancellare i messaggi scritti in maiscolo",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gmammolo",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "http": "0.0.1-security",
+    "node-telegram-bot-api": "^0.54.0"
+  }
+}
