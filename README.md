@@ -21,10 +21,12 @@ avvia una versione locale del server che permette di testate lo sviluppo
 
 ### env
 
-creare un file .env
+creare un file .env per inserire i seguenti dati:
 ```
 BOT_TOKEN=123456789:abcdefghijklmnoprqstuvwxyz
 ```
+
+Reminder: il token del bot viene generato e gestito dentro Telegram.
 
 ## Release
 
