@@ -35,18 +35,25 @@ if(config.telegram.token) {
 }
 
 
+
 //HEROKU fix: fa una chiamata ad heroku ogni 15 sec per tenere il server attivo
-if(process.env.RHEROKU) {
-    const timer = 900000; // 15 min
-    const interval = setInterval(() => {
-        https.get(process.env.RHEROKU, (res) => {
-            console.log(`ping server run.... statusCode: ${res.statusCode}`)
-        });
-    },timer);
-    
-    // to block interval
-    // clearInterval(interval);  
+function herokuNoStop() {
+    if(process.env.RHEROKU) {
+        const timer = 900000; // 15 min
+        const interval = setInterval(() => {
+            if(process.env.RHEROKUNOSTOP) {
+                https.get(process.env.RHEROKU, (res) => {
+                    console.log(`ping server run.... statusCode: ${res.statusCode}`)
+                });
+            } else {
+                // to block interval
+                clearInterval(interval);  
+            }
+        },timer);
+    }
 }
 
 
-
+if( process.env.RHEROKUNOSTOP &&  process.env.RHEROKU) {
+    herokuNoStop()
+}
