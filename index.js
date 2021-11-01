@@ -5,28 +5,22 @@
 
 // load process.env variables
 import {} from 'dotenv/config';
-
-import http from 'http';
 import https from 'https';
 import {config} from './config.js';
 import TelegramBot from './bot.js';
+import express from 'express';
 
+var app     = express();
+app.set('port', config.port);
 
-// Create an instance of the http server to handle HTTP requests
-let app = http.createServer((req, res) => {
-    // Set a response type of plain text for the response
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    // Send back a response and end the connection
-    if(config.telegram.token) {
-        res.end('Server in funzione, puoi usare tranquillamente il bot!\n');
-    } else {
-        res.end('Problemi con il server, verifica il log ( heroku logs --tail -a antiboomer-bot )!\n');
-    }
+app.get('/', function(request, response) {
+    var simpleResult = "<h1> AntiBoomer-Bot in funzione </h1>"+
+    "Se vedi questa pagina, il bot telegram dovrebbe funzionare correttamente."+
+    "cerca su telegram @antiboomerbot";
+    response.send(simpleResult);
+}).listen(app.get('port'), function() {
+    console.log('App is running, server is listening on port ', app.get('port'));
 });
-
-// Start the server on port 3000
-app.listen(config.port, config.url);
-console.log(`Node server running on port ${config.port}`);
 
 // start bot
 if(config.telegram.token) {
@@ -40,11 +34,14 @@ if(config.telegram.token) {
     console.error('Token di telegram non trovato!')
 }
 
+
 //HEROKU fix: fa una chiamata ad heroku ogni 15 sec per tenere il server attivo
 if(process.env.RHEROKU) {
-    const timer = 15000;
+    const timer = 900000; // 15 min
     const interval = setInterval(() => {
-        https.get(process.env.RHEROKU, (resp) => {});
+        https.get(process.env.RHEROKU, (res) => {
+            console.log(`ping server run.... statusCode: ${res.statusCode}`)
+        });
     },timer);
     
     // to block interval
