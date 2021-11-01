@@ -24,6 +24,8 @@ avvia una versione locale del server che permette di testate lo sviluppo
 creare un file .env per inserire i seguenti dati:
 ```
 BOT_TOKEN=123456789:abcdefghijklmnoprqstuvwxyz
+PORT=8080
+RHEROKU=https://url.herokuapp.com/
 ```
 
 Reminder: il token del bot viene generato e gestito dentro Telegram.
