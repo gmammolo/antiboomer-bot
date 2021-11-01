@@ -7,6 +7,7 @@
 import {} from 'dotenv/config';
 
 import http from 'http';
+import https from 'https';
 import {config} from './config.js';
 import TelegramBot from './bot.js';
 
@@ -31,10 +32,24 @@ console.log(`Node server running on port ${config.port}`);
 if(config.telegram.token) {
     const bot =  new TelegramBot(config.telegram.token);
     bot.start();
+
+    process.on('SIGQUIT', bot.stop);
+    process.on('SIGINT', bot.stop);
+
 } else {
     console.error('Token di telegram non trovato!')
 }
 
-// process.on('SIGQUIT', bot.stop);
-// process.on('SIGINT', bot.stop);
+//HEROKU fix: fa una chiamata ad heroku ogni 15 sec per tenere il server attivo
+if(process.env.RHEROKU) {
+    const timer = 15000;
+    const interval = setInterval(() => {
+        https.get(process.env.RHEROKU, (resp) => {});
+    },timer);
+    
+    // to block interval
+    // clearInterval(interval);  
+}
+
+
 

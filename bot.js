@@ -1,5 +1,8 @@
 import TelegramBotClient from 'node-telegram-bot-api'
-
+import Promise from 'bluebird';
+Promise.config({
+  cancellation: true
+});
 export default class Bot {
     constructor(token) {
         this.telegramBot = new TelegramBotClient(token)
@@ -14,7 +17,7 @@ export default class Bot {
             // console.log('Got a message', message)
             const text = message.text;
             if(text && this.checkUpperCase(text)) {
-                const newMessage = `@${message.from.username} ha detto:`+text.toLowerCase();
+                const newMessage = `@${message.from.username} ha detto: `+text.toLowerCase();
                 this.telegramBot.sendMessage(message.chat.id, newMessage, {reply_to_message_id: message.message_id});
                 this.telegramBot.sendMessage(message.chat.id, antiboomerMessage.replace('${nome}',message.from.username));
             }
@@ -32,9 +35,9 @@ export default class Bot {
     }
 
     async stop(){
-        if (telegramBot != null) {
-          await telegramBot.stopPolling({ cancel: true });
-          telegramBot = null;
+        if (this.telegramBot != null) {
+          await this.telegramBot.stopPolling({ cancel: true });
+          this.telegramBot = null;
         }
         process.exit();
     }
